@@ -1,5 +1,5 @@
 # :bulb: A Guide to Production Level Deep Learning :clapper: :scroll:  :ferry:
-[NOTE: This repo is still under development, and any feedback to make it better is welcome :blush: ]
+[NOTE: This repo is still under development, and all feedback and contribution are very welcome :blush:]
 
 Deploying deep learning models in production can be challenging, as it is far beyond training models with good performance. Several distinct components need to be designed and developed in order to deploy a production level deep learning system (seen below):
 
@@ -11,13 +11,44 @@ This repo aims to be an engineering guideline for building production-level deep
 
 The material presented here is borrowed from [Full Stack Deep Learning Bootcamp](https://fullstackdeeplearning.com) (by [Pieter Abbeel](https://people.eecs.berkeley.edu/~pabbeel/) at UC Berkeley, [Josh Tobin](http://josh-tobin.com/) at OpenAI, and [Sergey Karayev](https://sergeykarayev.com/) at Turnitin), [TFX workshop](https://conferences.oreilly.com/tensorflow/tf-ca/public/schedule/detail/79327) by [Robert Crowe](https://www.linkedin.com/in/robert-crowe/), and [Pipeline.ai](https://pipeline.ai/)'s [Advanced KubeFlow Meetup](https://www.meetup.com/Advanced-KubeFlow/) by [Chris Fregly](https://www.linkedin.com/in/cfregly/).
 
+# Machine Learning Projects
+Fun :flushed: fact: **85% of AI projects fail**. <sup>[1](#fsdl)</sup> Potential reasons include: 
+- Technically infeasible  or poorly scoped 
+- Never make the leap to production 
+- Unclear success criteria (metrics)
+- Poor team management 
+  
+## 1. ML Projects lifecycle
+<p align="center">
+<img src="https://github.com/alirezadir/Production-Level-Deep-Learning/blob/master/images/lifecycle.png" title="" width="95%" height="95%"></p>
+
+- Importance of understanding state of the art in your domain:
+  - Helps to understand what is possible 
+  - Helps to know what to try next 
+## 2. Mental Model for ML project 
+  The two important factors to consider when defining and prioritizing ML projects:
+  - High Impact:
+    - Complex parts of your pipeline 
+    - Where "cheap prediction" is valuable
+    - Where automating complicated manual process is valuable 
+  - Low Cost:
+    - Cost is driven by: 
+      - Data availability 
+      - Performance requirements: costs tend to scale super-linearly in the accuracy requirement 
+      - Problem difficulty: 
+        - Some of the hard problems include: unsupervised learning, reinforcement learning, and certain categories of supervised learning 
+<p align="center">
+<img src="https://github.com/alirezadir/Production-Level-Deep-Learning/blob/master/images/prioritize.png" title="" width="90%" height="90%">
+</p>
+  
+# Full stack pipeline 
+
 The following figure represents a high level overview of different components in a production level deep learning system:
 <p align="center">
-<img src="https://github.com/alirezadir/Production-Level-Deep-Learning/blob/master/images/infra_tooling.png" title="" width="95%" height="95%">
+<img src="https://github.com/alirezadir/Production-Level-Deep-Learning/blob/master/images/infra_tooling.png" title="" width="100%" height="100%">
 </p>
 In the following, we will go through each module and recommend toolsets and frameworks as well as best practices from practitioners that fit each component. 
 
-# Full stack pipeline 
 ## 1. Data Management 
 ### 1.1 Data Sources 
 * Supervised deep learning requires a lot of labeled data
@@ -34,6 +65,7 @@ In the following, we will go through each module and recommend toolsets and fram
   * Data labeling service companies:
     * [FigureEight](https://www.figure-eight.com/)  
 * Labeling platforms: 
+  * [Diffgram](https://diffgram.com/): Training Data Software (Computer Vision)
   * [Prodigy](https://prodi.gy/): An annotation tool powered
 by active learning (by developers of Spacy), text and image 
   * [HIVE](https://thehive.ai/): AI as a Service platform for computer vision  
@@ -142,22 +174,23 @@ by active learning (by developers of Spacy), text and image
   * Approaches: 
     * Grid search 
     * Random search 
-    * Bayesian optimization
-    * HyperBand
+    * Bayesian Optimization
+    * HyperBand (and ASHA)
+    * Population-based Training
 
   * Platforms: 
+    * [RayTune](http://tune.io/): Ray Tune is a Python library for hyperparameter tuning at any scale (with  a focus on deep learning and deep reinforcement learning). Supports any machine learning framework, including PyTorch, XGBoost, MXNet, and Keras.
     * [Katib](https://github.com/kubeflow/katib): Kubernete's Native System   for Hyperparameter Tuning and Neural Architecture Search, inspired by   [Google vizier](https://static.googleusercontent.com/media/ research.google.com/ja//pubs/archive/  bcb15507f4b52991a0783013df4222240e942381.pdf) and supports multiple ML/DL   frameworks (e.g. TensorFlow, MXNet, and PyTorch). 
     * [Hyperas](https://maxpumperla.com/hyperas/): a simple wrapper around  hyperopt for Keras, with a simple template notation to define  hyper-parameter ranges to tune.
     * [SIGOPT](https://sigopt.com/):  a scalable, enterprise-grade  optimization platform 
-    * [Ray-Tune](https://github.com/ray-project/ray/tree/master/python/ray/ tune): A scalable research platform for distributed model selection (with  a focus on deep learning and deep reinforcement learning) 
     * [Sweeps](https://docs.wandb.com/library/sweeps) from [Weights & Biases] (https://www.wandb.com/): Parameters are not explicitly specified by a   developer. Instead they are approximated and learned by a machine   learning model.
     * [Keras Tuner](https://github.com/keras-team/keras-tuner): A hyperparameter tuner for Keras, specifically for tf.keras with TensorFlow 2.0.
 
 ### 2.6. Distributed Training 
   * Data parallelism: Use it when iteration time is too long (both tensorflow and PyTorch support)
+    * [Ray Distributed Training](https://ray.readthedocs.io/en/latest/distributed_training.html)
   * Model parallelism: when model does not fit on a single GPU 
   * Other solutions: 
-    * Ray 
     * Horovod
 
 ## 3. Troubleshooting [TBD]
@@ -269,13 +302,13 @@ Machine Learning production software requires a more diverse set of test suites 
 </p>
 
 # Tensorflow Extended (TFX) 
-
+[TBD]
 <p align="center">
 <img src="https://github.com/alirezadir/Production-Level-Deep-Learning/blob/master/images/tfx_config.png" title="" width="95%" height="95%">
 </p>
 
 # Airflow and KubeFlow ML Pipelines 
-
+[TBD]
 <p align="center">
     <img src="https://github.com/alirezadir/Production-Level-Deep-Learning/blob/master/images/kubeflow_pipe.png" title="" width="45%" height="45%">
 </p>
